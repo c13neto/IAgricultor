@@ -4,3 +4,7 @@ python-dotenv
 pypdf
 sentence-transformers
 numpy
+tiktoken
+chromadb
+langchain-text-splitters
+langchain-community
