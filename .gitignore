@@ -15,5 +15,6 @@ __pycache__/
 # Configurações com chaves de API / Tokens locais
 .env
 
-# Modelos pesados baixados localmente (GGUF)
-modelo/*
+# Arquivos gerados e modelos baixados localmente (GGUF)
+data/modelo/*
+data/chroma_db/*
