@@ -8,6 +8,19 @@ Um assistente especialista em agricultura que roda localmente, utilizando o mode
 - Execução local e offline (após o download inicial do modelo).
 - Construído em Python com a biblioteca `llama-cpp-python`.
 
+## Requisitos de Sistema (Acessibilidade)
+
+O grande diferencial deste projeto é a sua arquitetura otimizada em C++ (via `llama.cpp`) associada à quantização (compressão) de 4-bits do modelo. Isso permite que a Inteligência Artificial rode de forma fluida em **computadores baratos e antigos**, sem necessidade de internet ou placa de vídeo cara.
+
+**Requisitos Mínimos:**
+- **Memória RAM:** 4 GB (O modelo consome cerca de 2.1 GB carregado + sistema operacional).
+- **Processador (CPU):** Qualquer processador dual-core (Intel i3 antigo, Celeron, Pentium, AMD Ryzen 3, etc). Quanto mais núcleos físicos, mais rápida a resposta.
+- **Placa de Vídeo (GPU):** Não exigida! Roda 100% via processador.
+- **Armazenamento:** Pelo menos 4 GB de espaço livre em disco (2.1 GB do modelo + PDFs do banco de dados).
+
+**Configuração Recomendada:**
+- 8 GB de RAM e um processador Quad-Core (para tempos de resposta mais confortáveis).
+
 ## Como instalar e executar
 
 1. **Clone o repositório:**
