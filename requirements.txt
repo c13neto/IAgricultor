@@ -1,0 +1,6 @@
+llama-cpp-python
+huggingface-hub
+python-dotenv
+pypdf
+sentence-transformers
+numpy

@@ -1,6 +1,6 @@
 # IAgricultor
 
-Um assistente especialista em agricultura que roda localmente, utilizando o modelo DeepSeek-R1-Distill-Qwen-1.5B-GGUF.
+Um assistente especialista em agricultura que roda localmente, utilizando o modelo Qwen2.5 3B em formato GGUF.
 
 ## Funcionalidades
 
@@ -16,15 +16,38 @@ Um assistente especialista em agricultura que roda localmente, utilizando o mode
    cd IAgricultor
    ```
 
-2. **Crie um ambiente virtual (recomendado):**
+2. **Instale tudo automaticamente:**
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # No Windows, use: venv\Scripts\activate
+   chmod +x setup.sh
+   ./setup.sh
+   ```
+   O script cria o ambiente virtual e instala as dependências de `requirements.txt`.
+
+   No Windows PowerShell, execute:
+   ```powershell
+   Set-ExecutionPolicy -Scope Process Bypass
+   . .\\setup.ps1
    ```
 
-3. **Instale as dependências necessárias:**
+3. **Ative o ambiente virtual:**
    ```bash
-   pip install llama-cpp-python huggingface-hub python-dotenv
+   source venv/bin/activate
+   ```
+   No Windows PowerShell:
+   ```powershell
+   .\\venv\\Scripts\\Activate.ps1
+   ```
+
+   Para sair do ambiente virtual:
+   ```bash
+   deactivate
+   ```
+
+   Se preferir instalar manualmente:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
    ```
 
 4. **Execute o programa:**
