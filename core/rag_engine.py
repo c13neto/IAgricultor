@@ -50,13 +50,20 @@ class RAGEngine:
         # Gera embeddings usando SentenceTransformer
         embeddings = self.encoder.encode(textos, show_progress_bar=True).tolist()
         
-        # Adiciona na coleção do ChromaDB
-        self.collection.add(
-            embeddings=embeddings,
-            documents=textos,
-            metadatas=metadados,
-            ids=ids
-        )
+        # Adiciona na coleção do ChromaDB em lotes para evitar limite máximo (ex: 5461)
+        try:
+            batch_size = self.chroma_client.get_max_batch_size()
+        except AttributeError:
+            batch_size = 5000
+            
+        for i in range(0, len(textos), batch_size):
+            end_idx = i + batch_size
+            self.collection.add(
+                embeddings=embeddings[i:end_idx],
+                documents=textos[i:end_idx],
+                metadatas=metadados[i:end_idx],
+                ids=ids[i:end_idx]
+            )
         
         print(f"[+] {len(chunks)} chunks adicionados ao ChromaDB.")
         return True
