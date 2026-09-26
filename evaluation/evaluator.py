@@ -4,7 +4,7 @@ import glob
 from typing import List, Dict, Any
 from core.llm_service import LLMService
 from core.rag_engine import RAGEngine
-from evaluation.metrics import calcular_rouge1
+from evaluation.metrics import avaliar_llm_judge
 from config import DATASET_DIR
 
 class PromptFactory:
@@ -34,9 +34,11 @@ class PromptFactory:
             
         return (
             f"Você é um especialista em agronomia.\n\n"
+            f"Sua tarefa é responder a seguinte pergunta baseando-se nas referências abaixo.\n"
+            f"Pergunta a ser respondida: {pergunta}\n\n"
             f"Documentos de referência:\n{contexto_rag}\n\n"
             f"{ex_str}"
-            f"Pergunta: {pergunta}\nResposta:"
+            f"Lembre-se de focar diretamente na Pergunta: {pergunta}\nResposta:"
         )
 
 class Evaluator:
@@ -137,10 +139,10 @@ class Evaluator:
                 print(f"[-] Erro ao inferir pergunta {idx}: {e}")
                 continue
                 
-            s_zero = calcular_rouge1(esperada, r_zero)
-            s_one = calcular_rouge1(esperada, r_one)
-            s_few = calcular_rouge1(esperada, r_few)
-            s_rag = calcular_rouge1(esperada, r_rag)
+            s_zero = avaliar_llm_judge(self.llm, pergunta, esperada, r_zero)
+            s_one = avaliar_llm_judge(self.llm, pergunta, esperada, r_one)
+            s_few = avaliar_llm_judge(self.llm, pergunta, esperada, r_few)
+            s_rag = avaliar_llm_judge(self.llm, pergunta, esperada, r_rag)
             
             scores["zero"].append(s_zero)
             scores["one"].append(s_one)
@@ -152,13 +154,13 @@ class Evaluator:
                 "Pergunta": pergunta,
                 "Resposta_Esperada": esperada,
                 "Zero_Shot": r_zero,
-                "ROUGE1_Zero_Shot": f"{s_zero}%",
+                "LLM_Judge_Zero_Shot": f"{s_zero}%",
                 "One_Shot": r_one,
-                "ROUGE1_One_Shot": f"{s_one}%",
+                "LLM_Judge_One_Shot": f"{s_one}%",
                 "Few_Shot": r_few,
-                "ROUGE1_Few_Shot": f"{s_few}%",
+                "LLM_Judge_Few_Shot": f"{s_few}%",
                 "Few_Shot_RAG": r_rag,
-                "ROUGE1_Few_Shot_RAG": f"{s_rag}%"
+                "LLM_Judge_Few_Shot_RAG": f"{s_rag}%"
             })
             
         self._salvar_relatorio(resultados, scores)
@@ -168,7 +170,7 @@ class Evaluator:
             return
             
         media = lambda arr: round(sum(arr)/len(arr), 2) if arr else 0
-        print("\n=== RESUMO DAS MÉTRICAS MÉDIAS (ROUGE-1 F1) ===")
+        print("\n=== RESUMO DAS MÉTRICAS MÉDIAS (LLM-as-a-Judge) ===")
         print(f" -> Zero-Shot:      {media(scores['zero'])}%")
         print(f" -> One-Shot:       {media(scores['one'])}%")
         print(f" -> Few-Shot:       {media(scores['few'])}%")

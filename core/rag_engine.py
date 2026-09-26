@@ -68,7 +68,7 @@ class RAGEngine:
         print(f"[+] {len(chunks)} chunks adicionados ao ChromaDB.")
         return True
 
-    def buscar_contexto(self, pergunta: str, top_k: int = 3) -> tuple[str, list[str]]:
+    def buscar_contexto(self, pergunta: str, top_k: int = 1) -> tuple[str, list[str]]:
         """Busca os textos mais relevantes usando ChromaDB."""
         if self.collection.count() == 0:
             return "", []
