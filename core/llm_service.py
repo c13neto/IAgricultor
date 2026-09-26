@@ -9,8 +9,10 @@ class LLMService:
         if not model_path.is_file():
             raise FileNotFoundError(f"[-] Modelo não encontrado em: {model_path}")
         
-        num_threads = min(os.cpu_count() or 4, 6)
-        print(f"[+] Carregando LLM de {model_path.name} usando {num_threads} threads...")
+        # Em CPUs com hyperthreading (ex: i7 com 16 threads e 8 núcleos), 
+        # o ideal para o llama.cpp é usar o número de núcleos físicos.
+        num_threads = max(4, (os.cpu_count() or 8) // 2)
+        print(f"[+] Carregando LLM de {model_path.name} otimizado para {num_threads} threads físicas...")
         
         self.llm = Llama(
             model_path=str(model_path),
